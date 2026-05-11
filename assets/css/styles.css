@@ -68,24 +68,26 @@
       line-height: 1.35;
       display: flex;
       align-items: center;
-      gap: 4px;
+      flex-wrap: wrap;
+      gap: 0;
     }
 
-    /* Tight vertical ticker — same cap-height as surrounding text */
+    /* Tight vertical ticker — width tracks artwork (~220×52 scaled to 32px tall ≈ 136px) */
     .name-rotator {
       position: relative;
       display: inline-block;
-      width: 180px;
+      width: 138px;
       height: 32px;
       overflow: hidden;
-      vertical-align: middle;
-      margin-left: 2px;
+      vertical-align: -0.06em;
+      margin: 0;
+      flex-shrink: 0;
     }
     .name-rotator img {
       position: absolute;
       left: 0;
       top: 0;
-      width: 180px;
+      width: 138px;
       height: 32px;
       object-fit: contain;
       object-position: left center;
@@ -94,14 +96,14 @@
       will-change: transform, opacity;
     }
     .name-rotator img.entering {
-      animation: tickerIn 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+      animation: tickerIn 0.22s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
     .name-rotator img.visible {
       opacity: 1;
       transform: translateY(0);
     }
     .name-rotator img.leaving {
-      animation: tickerOut 0.25s cubic-bezier(0.55, 0, 0.78, 0.4) forwards;
+      animation: tickerOut 0.2s cubic-bezier(0.55, 0, 0.78, 0.4) forwards;
     }
     @keyframes tickerIn {
       from { opacity: 0; transform: translateY(32px); }
@@ -127,7 +129,7 @@
     .hero-subtitle {
       font-family: var(--font-dm-sans);
       font-size: 22px;
-      font-weight: 700;
+      font-weight: 400;
       font-style: italic;
       color: var(--text-secondary);
       margin-top: 14px;
@@ -204,8 +206,8 @@
       .nav-link { font-size: 20px; }
       .hero-line1 { font-size: 20px; }
       .hero-body  { font-size: 20px; }
-      .name-rotator { width: 140px; height: 26px; }
-      .name-rotator img { width: 140px; height: 26px; transform: translateY(26px); }
+      .name-rotator { width: 112px; height: 26px; }
+      .name-rotator img { width: 112px; height: 26px; transform: translateY(26px); }
       @keyframes tickerIn  { from { opacity:0; transform: translateY(26px); } to { opacity:1; transform: translateY(0); } }
       @keyframes tickerOut { from { opacity:1; transform: translateY(0); } to { opacity:0; transform: translateY(-26px); } }
     }
