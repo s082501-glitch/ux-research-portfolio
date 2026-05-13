@@ -76,18 +76,18 @@
     .name-rotator {
       position: relative;
       display: inline-block;
-      width: 138px;
+      width: 170px;
       height: 32px;
       overflow: hidden;
-      vertical-align: -0.06em;
+      vertical-align: -0.18em;
       margin: 0;
       flex-shrink: 0;
     }
     .name-rotator img {
       position: absolute;
       left: 0;
-      top: 0;
-      width: 138px;
+      top: -1px;
+      width: 170px;
       height: 32px;
       object-fit: contain;
       object-position: left center;
@@ -95,6 +95,11 @@
       transform: translateY(32px);
       will-change: transform, opacity;
     }
+
+    /* Per-image horizontal nudges to visually align spacing after “I’m”. */
+    #name0 { left: -14px; }
+    #name1 { left: -14px; }
+    #name2 { left: 6px; }
     .name-rotator img.entering {
       animation: tickerIn 0.22s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     }
@@ -193,7 +198,13 @@
       padding: 0 var(--page-pad) clamp(32px, 5vw, 56px);
       display: flex; align-items: center; justify-content: space-between;
     }
-    .footer-thanks { font-style: italic; font-size: clamp(18px,2.4vw,24px); font-weight: 400; color: var(--accent-red); }
+    .footer-thanks {
+      font-family: "Snell Roundhand", "Bradley Hand", "Apple Chancery", "Segoe Script", cursive;
+      font-style: normal;
+      font-size: clamp(18px, 2.4vw, 24px);
+      font-weight: 400;
+      color: var(--accent-red);
+    }
     .footer-linkedin {
       display: flex; align-items: center; justify-content: center;
       width: 36px; height: 36px; background: #0a66c2;
@@ -206,8 +217,8 @@
       .nav-link { font-size: 20px; }
       .hero-line1 { font-size: 20px; }
       .hero-body  { font-size: 20px; }
-      .name-rotator { width: 112px; height: 26px; }
-      .name-rotator img { width: 112px; height: 26px; transform: translateY(26px); }
+      .name-rotator { width: 140px; height: 26px; }
+      .name-rotator img { width: 140px; height: 26px; transform: translateY(26px); }
       @keyframes tickerIn  { from { opacity:0; transform: translateY(26px); } to { opacity:1; transform: translateY(0); } }
       @keyframes tickerOut { from { opacity:1; transform: translateY(0); } to { opacity:0; transform: translateY(-26px); } }
     }
