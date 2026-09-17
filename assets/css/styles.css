@@ -166,6 +166,14 @@
     }
     @media (max-width: 640px) { .work { grid-template-columns: 1fr; } }
     .card { display: block; cursor: pointer; color: inherit; }
+    .card--locked {
+      cursor: default;
+      pointer-events: none;
+      user-select: none;
+    }
+    .card--locked .card-image {
+      pointer-events: auto;
+    }
     .card-image {
       width: 100%; aspect-ratio: 16 / 10;
       border-radius: 6px; overflow: hidden;
@@ -179,6 +187,10 @@
     .card:hover .card-image {
       transform: translateY(-3px);
       box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+    }
+    .card--locked:hover .card-image {
+      transform: none;
+      box-shadow: none;
     }
     .card-image img {
       width: 100%;
