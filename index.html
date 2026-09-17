@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Sarika — UX Researcher + Project Manager</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,8 +45,10 @@
 
   <section class="work" id="work">
 
-    <article class="card">
-      <div class="card-image"><!-- <img src="images/superlabs.jpg" alt="Super Labs" /> --></div>
+    <a class="card" href="case-study.html?study=super-labs">
+      <div class="card-image">
+        <img src="assets/images/latch.jpg" alt="Latch workflow onboarding" />
+      </div>
       <p class="card-client">Super Labs</p>
       <h2 class="card-title">Designing Workflow Automation Onboarding for Non-Technical Users</h2>
       <div class="card-tags">
@@ -53,10 +58,12 @@
         <span class="tag">SaaS</span>
         <span class="tag">B2B</span>
       </div>
-    </article>
+    </a>
 
-    <article class="card">
-      <div class="card-image"><!-- <img src="images/forefront.jpg" alt="UW Forefront" /> --></div>
+    <a class="card" href="case-study.html?study=uw-forefront">
+      <div class="card-image">
+        <img src="assets/images/forefront.jpg" alt="UW Forefront Suicide Prevention - Together We LEARN student guide" />
+      </div>
       <p class="card-client">UW Forefront Suicide Prevention</p>
       <h2 class="card-title">Redesigning Suicide Prevention Curriculum for Middle School Audiences</h2>
       <div class="card-tags">
@@ -65,10 +72,12 @@
         <span class="tag">Education</span>
         <span class="tag">B2C</span>
       </div>
-    </article>
+    </a>
 
-    <article class="card">
-      <div class="card-image"><!-- <img src="images/ascend.jpg" alt="Ascend Meditations" /> --></div>
+    <a class="card" href="case-study.html?study=ascend-meditations">
+      <div class="card-image">
+        <img src="assets/images/ascend.jpg" alt="Ascend Meditations" />
+      </div>
       <p class="card-client">Ascend Meditations</p>
       <h2 class="card-title">Evaluating Feature Usability for an AI Athlete Meditation App</h2>
       <div class="card-tags">
@@ -78,10 +87,17 @@
         <span class="tag">B2C</span>
         <span class="tag">Mobile App</span>
       </div>
-    </article>
+    </a>
 
-    <article class="card">
-      <div class="card-image"><!-- <img src="images/arboretum.jpg" alt="Washington Park Arboretum" /> --></div>
+    <a class="card" href="case-study.html?study=arboretum">
+      <div class="card-image card-slideshow" aria-label="Washington Park Arboretum signage slideshow">
+        <img src="assets/images/arboretum-1.jpg" alt="Washington Park Arboretum Linden Grove Trail upright sign" class="slide active" />
+        <img src="assets/images/arboretum-2.jpg" alt="Washington Park Arboretum Ridgeline Grove Trail shelter sign" class="slide" />
+        <div class="slideshow-indicators" aria-hidden="true">
+          <span class="indicator active"></span>
+          <span class="indicator"></span>
+        </div>
+      </div>
       <p class="card-client">Washington Park Arboretum</p>
       <h2 class="card-title">Redesigning Wayfinding Signage for Accessible Visitor Navigation</h2>
       <div class="card-tags">
@@ -90,7 +106,7 @@
         <span class="tag">Accessibility</span>
         <span class="tag">Service Design</span>
       </div>
-    </article>
+    </a>
 
   </section>
 
@@ -104,7 +120,7 @@
   </footer>
 
   <script src="assets/js/name-rotator.js" defer></script>
-
+  <script src="assets/js/card-slideshow.js" defer></script>
 
 </body>
 </html>

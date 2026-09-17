@@ -18,8 +18,22 @@
       --highlight-bg: #f5c6b8;
       --card-bg: #d8d8d8;
       --tag-border: #c8c8c8;
-      --page-pad: clamp(16px, 3.5vw, 40px);
-      --max-width: min(1320px, calc(100vw - 2 * var(--page-pad)));
+      --page-pad: clamp(20px, 4vw, 48px);
+      --content-width: 1400px;
+      --max-width: min(1400px, calc(100vw - 2 * var(--page-pad)));
+      /* Spacing scale (shreym.com / Framer-style rhythm) */
+      --space-2xs: 4px;
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 96px;
+      --section-gap: clamp(64px, 8vw, 96px);
+      --text-stack: var(--space-xs);
+      --text-to-media: clamp(32px, 4vw, 48px);
     }
     html { font-size: 16px; scroll-behavior: smooth; }
     body {
@@ -37,7 +51,7 @@
       align-items: flex-end;
       justify-content: center;
       gap: clamp(20px, 4vw, 56px);
-      padding: 12px var(--page-pad) 0;
+      padding: var(--space-lg) var(--page-pad) 0;
     }
     .nav-link {
       font-family: var(--font-absans);
@@ -56,7 +70,7 @@
     /* HERO */
     .hero {
       max-width: var(--max-width);
-      margin: clamp(28px, 5vw, 48px) auto 0;
+      margin: var(--space-3xl) auto 0;
       padding: 0 var(--page-pad);
     }
 
@@ -125,7 +139,8 @@
       font-weight: 400;
       line-height: 1.5;
       color: var(--text-primary);
-      margin-top: 4px; max-width: min(1020px, 100%);
+      margin-top: var(--space-2xs);
+      max-width: min(1020px, 100%);
     }
     .highlight {
       background: var(--highlight-bg);
@@ -137,20 +152,20 @@
       font-weight: 400;
       font-style: italic;
       color: var(--text-secondary);
-      margin-top: 14px;
+      margin-top: var(--space-sm);
     }
 
     /* WORK GRID */
     .work {
       max-width: var(--max-width);
-      margin: clamp(48px, 7vw, 80px) auto 0;
+      margin: var(--section-gap) auto 0;
       padding: 0 var(--page-pad);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: clamp(32px, 5vw, 56px) clamp(20px, 3vw, 36px);
+      gap: var(--space-3xl) var(--space-xl);
     }
     @media (max-width: 640px) { .work { grid-template-columns: 1fr; } }
-    .card { cursor: pointer; }
+    .card { display: block; cursor: pointer; color: inherit; }
     .card-image {
       width: 100%; aspect-ratio: 16 / 10;
       border-radius: 6px; overflow: hidden;
@@ -165,23 +180,98 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 28px rgba(0,0,0,0.10);
     }
-    .card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: #f0eef5;
+    }
+    .card-image:has(img) {
+      background-image: none;
+      background-color: #f0eef5;
+    }
+
+    /* Card Slideshow */
+    .card-slideshow {
+      position: relative;
+    }
+    .card-slideshow .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background: #f0eef5;
+      opacity: 0;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      will-change: opacity;
+      z-index: 1;
+    }
+    .card-slideshow .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
+    }
+    .card-slideshow .slide.shuffling-out {
+      opacity: 0;
+      z-index: 1;
+    }
+
+    /* Slide Indicator Dots */
+    .slideshow-indicators {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      padding: 3px 6px;
+      background: rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 12px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .slideshow-indicators .indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      transition: width 0.45s ease, background 0.45s ease, border-radius 0.45s ease;
+    }
+    .slideshow-indicators .indicator.active {
+      width: 14px;
+      border-radius: 4px;
+      background: #ffffff;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card-slideshow .slide {
+        transition: opacity 0.35s ease;
+      }
+    }
     .card-client {
       font-family: var(--font-inter);
       font-size: 15px;
       font-weight: 500;
       color: #999999;
-      margin-top: 12px;
+      margin-top: var(--space-sm);
     }
     .card-title {
       font-family: var(--font-absans);
       font-size: 16px;
       font-weight: 400;
       color: var(--text-primary);
-      margin-top: 4px;
+      margin-top: var(--space-2xs);
       line-height: 1.45;
     }
-    .card-tags   { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--space-sm); }
     .tag {
       font-family: var(--font-absans);
       font-size: 14px;
@@ -194,8 +284,8 @@
     /* FOOTER */
     footer {
       max-width: var(--max-width);
-      margin: clamp(60px, 10vw, 100px) auto 0;
-      padding: 0 var(--page-pad) clamp(32px, 5vw, 56px);
+      margin: var(--section-gap) auto 0;
+      padding: 0 var(--page-pad) var(--space-3xl);
       display: flex; align-items: center; justify-content: space-between;
     }
     .footer-thanks {
