@@ -103,8 +103,8 @@
     /* HERO */
     .hero {
       max-width: var(--max-width);
-      margin: var(--space-xl) auto 0;
-      padding: 0 var(--page-pad);
+      margin: var(--space-2xl) auto var(--space-xl);
+      padding: var(--space-md) var(--page-pad);
     }
 
     .hero-line1 {
