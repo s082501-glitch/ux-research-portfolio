@@ -61,8 +61,27 @@
       letter-spacing: 0.01em;
       transition: color 0.2s;
       white-space: nowrap;
+      position: relative;
+      padding-bottom: 4px;
     }
-    .nav-link:hover { color: var(--accent-red); }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1.5px;
+      background: var(--accent-red);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.2s ease;
+    }
+    .nav-link:hover {
+      color: var(--accent-red);
+    }
+    .nav-link:hover::after {
+      transform: scaleX(1);
+    }
 
     /* Avatar + revolving name stacked as one brand mark */
     .nav-brand {
