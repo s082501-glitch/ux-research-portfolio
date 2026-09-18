@@ -159,12 +159,12 @@
 
     .hero-body {
       font-family: var(--font-absans);
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 400;
-      line-height: 1.5;
+      line-height: 1.45;
       color: var(--text-primary);
-      margin-top: var(--space-2xs);
-      max-width: min(1020px, 100%);
+      margin-top: 0;
+      max-width: min(920px, 100%);
     }
     .highlight {
       background: var(--highlight-bg);
