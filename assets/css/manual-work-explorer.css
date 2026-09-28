@@ -1,0 +1,429 @@
+/* Repetitive Computer Work Explorer — Latch / Super Labs */
+
+.cs-explorer {
+  /* Okabe–Ito-inspired, colorblind-safer than red/green */
+  --mwe-rep: #d55e00;
+  --mwe-rep-soft: #f0a060;
+  --mwe-oth: #0072b2;
+  --mwe-surface: #f7f6f4;
+  --mwe-border: #e5e2dc;
+  --mwe-radius: 8px;
+
+  margin-top: var(--space-xl);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--mwe-surface);
+  border: 1px solid var(--mwe-border);
+  border-radius: 12px;
+}
+
+.cs-explorer__header {
+  margin-bottom: var(--space-lg);
+}
+
+.cs-explorer__eyebrow {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-2xs);
+}
+
+.cs-explorer__title {
+  font-family: var(--font-absans);
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.cs-explorer__unit {
+  font-family: var(--font-dm-sans);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 6px 0 0;
+  line-height: 1.4;
+}
+
+.cs-explorer__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.cs-explorer__control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-lg);
+}
+
+.cs-explorer__control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cs-explorer__control-label {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.cs-explorer__segment {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid var(--mwe-border);
+  border-radius: var(--mwe-radius);
+  overflow: hidden;
+  background: #fff;
+}
+
+.cs-explorer__segment--2 {
+  min-width: min(100%, 220px);
+}
+
+.cs-explorer__segment--3 {
+  min-width: min(100%, 280px);
+}
+
+.cs-explorer__segment--4 {
+  min-width: min(100%, 360px);
+}
+
+.cs-explorer__seg-btn {
+  font-family: var(--font-dm-sans);
+  font-size: 13px;
+  line-height: 1.2;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cs-explorer__seg-btn + .cs-explorer__seg-btn {
+  border-left: 1px solid var(--mwe-border);
+}
+
+.cs-explorer__seg-btn:hover:not(:disabled):not([aria-pressed="true"]) {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.cs-explorer__seg-btn[aria-pressed="true"] {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.cs-explorer__seg-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cs-explorer__seg-btn:focus-visible {
+  outline: 2px solid var(--accent-red);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.cs-explorer__team {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.cs-explorer__team[hidden] {
+  display: none !important;
+}
+
+.cs-explorer__team input[type="range"] {
+  flex: 1 1 140px;
+  max-width: 220px;
+  accent-color: var(--mwe-rep);
+}
+
+.cs-explorer__team input[type="number"] {
+  font-family: var(--font-dm-sans);
+  font-size: 14px;
+  width: 72px;
+  height: 36px;
+  border: 1px solid var(--mwe-border);
+  border-radius: var(--mwe-radius);
+  padding: 0 10px;
+  background: #fff;
+  color: var(--text-primary);
+}
+
+.cs-explorer__muted {
+  font-family: var(--font-dm-sans);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.cs-explorer__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  font-family: var(--font-dm-sans);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.cs-explorer__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cs-explorer__legend em {
+  font-style: italic;
+  color: #999;
+}
+
+.cs-explorer__legend[hidden] {
+  display: none !important;
+}
+
+.cs-explorer__sort-note {
+  margin-left: auto;
+  color: #999;
+}
+
+.cs-explorer__swatch {
+  width: 14px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.cs-explorer__swatch--manual {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--mwe-rep),
+    var(--mwe-rep) 2px,
+    var(--mwe-rep-soft) 2px,
+    var(--mwe-rep-soft) 4px
+  );
+}
+
+.cs-explorer__swatch--other {
+  background: var(--mwe-oth);
+}
+
+.cs-explorer__def {
+  font-family: var(--font-dm-sans);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-md);
+  line-height: 1.45;
+}
+
+.cs-explorer__insight {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 var(--space-md);
+}
+
+.cs-explorer__insight-line {
+  font-family: var(--font-dm-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: #fff;
+  border: 1px solid var(--mwe-border);
+  border-radius: var(--mwe-radius);
+  padding: 12px 14px;
+}
+
+.cs-explorer__insight-line strong {
+  font-weight: 500;
+  font-family: var(--font-absans);
+}
+
+.cs-explorer__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid var(--mwe-border);
+  border-radius: var(--mwe-radius);
+  padding: var(--space-md);
+}
+
+.cs-explorer__bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cs-explorer__bar-label {
+  width: 190px;
+  flex: none;
+  font-family: var(--font-dm-sans);
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.cs-explorer__bar-track {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 8px;
+}
+
+.cs-explorer__bar-stack {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 18px;
+}
+
+.cs-explorer__bar {
+  height: 18px;
+  min-width: 2px;
+}
+
+.cs-explorer__bar--rep {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--mwe-rep),
+    var(--mwe-rep) 3px,
+    var(--mwe-rep-soft) 3px,
+    var(--mwe-rep-soft) 6px
+  );
+  border-radius: 4px 0 0 4px;
+}
+
+.cs-explorer__bar--oth {
+  background: var(--mwe-oth);
+  border-radius: 0 4px 4px 0;
+}
+
+.cs-explorer__bar--rep:only-child {
+  border-radius: 4px;
+}
+
+.cs-explorer__bar-value {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cs-explorer__footnote {
+  font-family: var(--font-dm-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: var(--space-sm) 0 0;
+}
+
+.cs-explorer__method {
+  margin-top: var(--space-lg);
+  border-top: 1px solid var(--mwe-border);
+  padding-top: var(--space-md);
+}
+
+.cs-explorer__method summary {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cs-explorer__method summary::-webkit-details-marker {
+  display: none;
+}
+
+.cs-explorer__method summary::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.15s;
+}
+
+.cs-explorer__method[open] summary::before {
+  transform: rotate(45deg);
+}
+
+.cs-explorer__method-body {
+  margin-top: var(--space-md);
+  font-family: var(--font-dm-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 62ch;
+}
+
+.cs-explorer__method-body p + p {
+  margin-top: var(--space-sm);
+}
+
+.cs-explorer__method-body strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .cs-explorer {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .cs-explorer__seg-btn {
+    padding: 8px 8px;
+    font-size: 12px;
+    min-height: 34px;
+  }
+
+  .cs-explorer__segment--2,
+  .cs-explorer__segment--3,
+  .cs-explorer__segment--4 {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .cs-explorer__bar-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .cs-explorer__bar-label {
+    width: auto;
+  }
+
+  .cs-explorer__sort-note {
+    margin-left: 0;
+    width: 100%;
+  }
+}
