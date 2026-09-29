@@ -1,23 +1,23 @@
 /* Repetitive Computer Work Explorer — Latch / Super Labs */
 
 .cs-explorer {
-  /* Okabe–Ito-inspired, colorblind-safer than red/green */
-  --mwe-rep: #d55e00;
-  --mwe-rep-soft: #f0a060;
-  --mwe-oth: #0072b2;
+  /* Latch product colors (same purple family as the builder mocks) */
+  --mwe-rep: var(--latch-accent, #6c5ce7);
+  --mwe-rep-soft: var(--latch-accent-soft, #a29bfe);
+  --mwe-oth: #cfc8f5;
   --mwe-surface: #f7f6f4;
   --mwe-border: #e5e2dc;
   --mwe-radius: 8px;
 
-  margin-top: var(--space-xl);
-  padding: var(--space-xl) var(--space-lg);
+  margin-top: 0;
+  padding: var(--space-lg);
   background: var(--mwe-surface);
   border: 1px solid var(--mwe-border);
   border-radius: 12px;
 }
 
 .cs-explorer__header {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 .cs-explorer__eyebrow {
@@ -25,24 +25,7 @@
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
-  margin: 0 0 var(--space-2xs);
-}
-
-.cs-explorer__title {
-  font-family: var(--font-absans);
-  font-size: clamp(18px, 2vw, 22px);
-  font-weight: 400;
-  line-height: 1.3;
-  color: var(--text-primary);
   margin: 0;
-}
-
-.cs-explorer__unit {
-  font-family: var(--font-dm-sans);
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin: 6px 0 0;
-  line-height: 1.4;
 }
 
 .cs-explorer__controls {
@@ -102,13 +85,13 @@
   font-family: var(--font-dm-sans);
   font-size: 13px;
   line-height: 1.2;
-  min-height: 36px;
-  padding: 8px 10px;
+  min-height: 40px;
+  padding: 10px 12px;
   border: none;
   background: transparent;
   color: var(--text-primary);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s cubic-bezier(0.2, 0, 0, 1), color 0.15s cubic-bezier(0.2, 0, 0, 1), transform 0.15s cubic-bezier(0.2, 0, 0, 1);
   text-align: center;
   white-space: nowrap;
   width: 100%;
@@ -123,6 +106,10 @@
   background: rgba(0, 0, 0, 0.04);
 }
 
+.cs-explorer__seg-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
 .cs-explorer__seg-btn[aria-pressed="true"] {
   background: #1a1a1a;
   color: #fff;
@@ -134,7 +121,7 @@
 }
 
 .cs-explorer__seg-btn:focus-visible {
-  outline: 2px solid var(--accent-red);
+  outline: 2px solid var(--focus-ring, var(--accent-red));
   outline-offset: -2px;
   z-index: 1;
 }
@@ -268,39 +255,44 @@
 }
 
 .cs-explorer__bar-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(168px, 240px) minmax(0, 1fr);
+  gap: 12px 16px;
   align-items: center;
-  gap: 12px;
 }
 
 .cs-explorer__bar-label {
-  width: 190px;
-  flex: none;
+  min-width: 0;
   font-family: var(--font-dm-sans);
   font-size: 12px;
-  line-height: 1.25;
+  line-height: 1.35;
   color: var(--text-primary);
+  overflow-wrap: anywhere;
 }
 
 .cs-explorer__bar-track {
-  flex: 1;
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 8px;
+  gap: 10px;
 }
 
 .cs-explorer__bar-stack {
   display: flex;
-  align-items: center;
-  flex: 1;
+  align-items: stretch;
+  flex: 1 1 auto;
   min-width: 0;
+  max-width: 100%;
   height: 18px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .cs-explorer__bar {
-  height: 18px;
-  min-width: 2px;
+  height: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .cs-explorer__bar--rep {
@@ -329,7 +321,10 @@
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  min-width: 5.5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .cs-explorer__footnote {
@@ -382,7 +377,7 @@
   font-size: 13px;
   line-height: 1.6;
   color: var(--text-secondary);
-  max-width: 62ch;
+  max-width: none;
 }
 
 .cs-explorer__method-body p + p {
@@ -402,7 +397,7 @@
   .cs-explorer__seg-btn {
     padding: 8px 8px;
     font-size: 12px;
-    min-height: 34px;
+    min-height: 40px;
   }
 
   .cs-explorer__segment--2,
@@ -413,17 +408,106 @@
   }
 
   .cs-explorer__bar-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
+    grid-template-columns: 1fr;
+    gap: 6px;
   }
 
   .cs-explorer__bar-label {
     width: auto;
   }
 
+  .cs-explorer__bar-value {
+    min-width: 0;
+  }
+
   .cs-explorer__sort-note {
     margin-left: 0;
     width: 100%;
+  }
+}
+
+/* ── Total cost insight (above explorer) ── */
+.cs-cost-insight {
+  --mwe-rep: var(--latch-accent, #6c5ce7);
+  --mwe-surface: #f7f6f4;
+  --mwe-border: #e5e2dc;
+
+  margin-top: 0;
+  padding: var(--space-lg);
+  background: var(--mwe-surface);
+  border: 1px solid var(--mwe-border);
+  border-radius: 12px;
+}
+
+.cs-cost-insight__lead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 10px;
+  font-family: var(--font-dm-sans);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-lg);
+  max-width: none;
+  text-wrap: pretty;
+}
+
+.cs-cost-insight__lead-text {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.cs-cost-insight__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.cs-cost-insight__tile {
+  background: #fff;
+  border: 1px solid var(--mwe-border, #e5e2dc);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.cs-cost-insight__value {
+  font-family: var(--font-absans);
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.cs-cost-insight__value--accent {
+  color: var(--latch-accent, #6c5ce7);
+}
+
+.cs-cost-insight__label {
+  font-family: var(--font-dm-sans);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+.cs-cost-insight__footnote {
+  font-family: var(--font-dm-sans);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: var(--space-md) 0 0;
+  max-width: none;
+}
+
+@media (max-width: 640px) {
+  .cs-cost-insight {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .cs-cost-insight__tiles {
+    grid-template-columns: 1fr;
   }
 }

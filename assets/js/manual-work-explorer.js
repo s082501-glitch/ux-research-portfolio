@@ -157,9 +157,6 @@
   };
 
   const els = {
-    scope: document.getElementById("mwe-scope"),
-    title: root.querySelector(".cs-explorer__title"),
-    unit: document.getElementById("mwe-unit"),
     view: document.getElementById("mwe-view"),
     metric: document.getElementById("mwe-metric"),
     metricGroup: document.getElementById("mwe-metric-group"),
@@ -169,8 +166,8 @@
     teamSize: document.getElementById("mwe-team-size"),
     teamSlider: document.getElementById("mwe-team-slider"),
     legend: document.getElementById("mwe-legend"),
-    insight: document.getElementById("mwe-insight"),
-    footnote: document.getElementById("mwe-footnote"),
+    legendOth: document.getElementById("mwe-legend-oth"),
+    legendRep: document.getElementById("mwe-legend-rep"),
     rows: document.getElementById("mwe-rows"),
     sortNote: document.getElementById("mwe-sort-note"),
   };
@@ -222,12 +219,6 @@
       return "$" + v.toFixed(0);
     }
     return "$" + Math.round(v).toLocaleString();
-  }
-
-  function periodWord() {
-    return { hourly: "hour", daily: "day", weekly: "week", yearly: "year" }[
-      state.gran
-    ];
   }
 
   function renderSegment(container, options, key) {
@@ -291,125 +282,34 @@
   });
 
   function updateCopy(rows, indView, isHourlyCost) {
-    els.scope.textContent = indView
-      ? "13 industries · repetitive computer work share"
-      : "10 occupations · repetitive computer work share";
+    const showOther = state.metric === "hours";
 
-    if (isHourlyCost) {
-      els.title.textContent = "Occupations by average hourly wage";
-    } else if (indView) {
-      els.title.textContent =
-        state.metric === "cost"
-          ? "Industries with the highest cost of repetitive computer work"
-          : "Industries with the most repetitive computer work";
-    } else if (state.metric === "cost") {
-      els.title.textContent =
-        "Occupations with the highest cost of repetitive computer work";
-    } else {
-      els.title.textContent =
-        "Occupations with the most repetitive computer work";
+    els.legend.hidden = false;
+    if (els.legendOth) els.legendOth.hidden = !showOther;
+    if (els.legendRep) {
+      els.legendRep.textContent = isHourlyCost
+        ? "Hourly wage"
+        : state.metric === "cost"
+          ? "Cost of repetitive manual work"
+          : "Repetitive manual work";
     }
-
-    els.legend.hidden = !!isHourlyCost;
     if (els.sortNote) {
       els.sortNote.textContent = isHourlyCost
         ? "Sorted by hourly wage ↓"
-        : "Sorted by repetitive computer work ↓";
+        : "Sorted by repetitive manual work ↓";
     }
-
-    if (els.unit) {
-      if (isHourlyCost) {
-        els.unit.textContent =
-          "Bar length = average hourly wage (USD) · measured ATUS wages";
-      } else if (state.metric === "cost") {
-        els.unit.textContent =
-          "Bar length = total labor cost · orange/hatched = repetitive computer work · values in USD " +
-          (state.scale === "team" ? "for the team" : "per employee") +
-          ", per " +
-          periodWord();
-      } else {
-        els.unit.textContent =
-          "Bar length = total work · orange/hatched = repetitive computer work · values in hours " +
-          (state.scale === "team" ? "for the team" : "per employee") +
-          ", per " +
-          periodWord();
-      }
-    }
-
-    const top = rows[0];
-    const bottom = rows[rows.length - 1];
-    const who =
-      state.scale === "team" && !isHourlyCost
-        ? "across a team of " + teamSize()
-        : "per employee";
-    const pw = periodWord();
-
-    function line(tag, r) {
-      if (isHourlyCost) {
-        return (
-          "<strong>" +
-          tag +
-          " (" +
-          r.name +
-          "):</strong> " +
-          fmt(r.rep) +
-          " for every hour of work."
-        );
-      }
-      return (
-        "<strong>" +
-        tag +
-        " (" +
-        r.name +
-        "):</strong> " +
-        fmt(r.rep) +
-        " of repetitive computer work out of " +
-        fmt(r.tot) +
-        " total (" +
-        Math.round(r.share) +
-        "%) per " +
-        pw +
-        ", " +
-        who +
-        "."
-      );
-    }
-
-    if (top && bottom) {
-      els.insight.innerHTML =
-        '<span class="cs-explorer__insight-line">' +
-        line("Highest", top) +
-        "</span>" +
-        '<span class="cs-explorer__insight-line">' +
-        line("Lowest", bottom) +
-        "</span>";
-    }
-
-    let foot =
-      "Hours and wages: American Time Use Survey (Bureau of Labor Statistics), 2003–2024. Share of time on repetitive computer work: modeled from McKinsey Global Institute’s national figure of 33% of working time on collecting and processing data (A Future That Works, 2017), distributed across ";
-    if (indView) {
-      foot +=
-        "industries by the job mix of each, with Financial Activities set to McKinsey’s roughly 50% for finance and insurance.";
-      if (!industryHasWages) {
-        foot +=
-          " Cost by industry needs industry wages, which are not in the survey output yet.";
-      }
-    } else {
-      foot +=
-        "occupations by the computer-based admin content of each role. Wages are survey hourly wages, so cost is conservative.";
-    }
-    els.footnote.textContent = foot;
   }
 
   function renderBars(rows, isHourlyCost) {
     const host = els.rows;
     host.innerHTML = "";
-    const maxTot = Math.max.apply(
+    const maxRep = Math.max.apply(
       null,
       rows.map(function (r) {
-        return r.tot;
+        return r.rep;
       })
     );
+    const showOther = state.metric === "hours";
 
     const unitHint =
       state.metric === "hours"
@@ -419,23 +319,42 @@
           : "USD";
 
     rows.forEach(function (r, i) {
-      const wRep = maxTot ? (r.rep / maxTot) * 100 : 0;
-      const wOth = maxTot ? (r.oth / maxTot) * 100 : 0;
+      /* Hours: proportional flex segments that always fit the track.
+         Cost / hourly: orange only, scaled to the highest value (≤100%). */
+      let wRep;
+      let wOth = 0;
+      if (showOther) {
+        const tot = r.tot || r.rep + r.oth || 1;
+        wRep = (r.rep / tot) * 100;
+        wOth = Math.max(0, 100 - wRep);
+      } else {
+        wRep = maxRep ? (r.rep / maxRep) * 100 : 0;
+      }
+
       const label = isHourlyCost
         ? fmt(r.rep)
-        : fmt(r.rep) + " · " + Math.round(r.share) + "% of week";
+        : showOther
+          ? fmt(r.rep) + " · " + Math.round(r.share) + "%"
+          : fmt(r.rep);
 
       const aria = isHourlyCost
         ? r.name + ": " + fmt(r.rep) + " average hourly wage"
-        : r.name +
-          ": " +
-          fmt(r.rep) +
-          " repetitive computer work of " +
-          fmt(r.tot) +
-          " total (" +
-          Math.round(r.share) +
-          "%), " +
-          unitHint;
+        : showOther
+          ? r.name +
+            ": " +
+            fmt(r.rep) +
+            " repetitive manual work of " +
+            fmt(r.tot) +
+            " total (" +
+            Math.round(r.share) +
+            "%), " +
+            unitHint
+          : r.name + ": " + fmt(r.rep) + " " + unitHint;
+
+      const repStyle = showOther
+        ? "flex:" + Math.max(wRep, 0.4) + " 1 0%"
+        : "flex:0 0 auto;width:" + Math.min(Math.max(wRep, 0.4), 100) + "%";
+      const othStyle = "flex:" + wOth + " 1 0%";
 
       const row = document.createElement("div");
       row.className = "cs-explorer__bar-row";
@@ -451,13 +370,13 @@
         '<div class="cs-explorer__bar-stack" title="' +
         aria.replace(/"/g, "&quot;") +
         '">' +
-        '<div class="cs-explorer__bar cs-explorer__bar--rep" style="width:' +
-        Math.max(wRep, 0.4) +
-        '%"></div>' +
+        '<div class="cs-explorer__bar cs-explorer__bar--rep" style="' +
+        repStyle +
+        '"></div>' +
         (wOth > 0
-          ? '<div class="cs-explorer__bar cs-explorer__bar--oth" style="width:' +
-            wOth +
-            '%"></div>'
+          ? '<div class="cs-explorer__bar cs-explorer__bar--oth" style="' +
+            othStyle +
+            '"></div>'
           : "") +
         "</div>" +
         '<span class="cs-explorer__bar-value">' +
@@ -472,7 +391,9 @@
       "aria-label",
       isHourlyCost
         ? "Average hourly wages by category, highest first"
-        : "Stacked bars of repetitive computer work versus other work, highest repetitive first"
+        : showOther
+          ? "Stacked bars of repetitive manual work versus other work"
+          : "Bars of repetitive manual work cost, highest first"
     );
   }
 
